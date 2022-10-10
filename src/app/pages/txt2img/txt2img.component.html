@@ -1,0 +1,242 @@
+<nz-row nzJustify="center" nzGutter="[12,12]">
+  <nz-col nzSpan="24">
+    <nz-card nzTitle="Prompt">
+      <nz-row nzGutter="8" nzJustify="center">
+        <nz-col nzSpan="12" >
+          <nz-form-item>
+            <nz-form-label nzSpan="4">Prompt Input</nz-form-label>
+            <nz-form-control nzSpan="20">
+              <textarea nz-input placeholder="input prompt text" maxlength="75" [(ngModel)]="prompt"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+        <nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzSpan="4">Negative Prompt Input</nz-form-label>
+            <nz-form-control nzSpan="20">
+              <textarea nz-input placeholder="input prompt text" maxlength="75" [(ngModel)]="negPrompt"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+      </nz-row>
+      <nz-row>
+        <nz-col nzSpan="12" *ngIf="availableModels !== null">
+          <label for="modelSelected">Selected Model: </label>
+          <button nz-button nz-dropdown [nzDropdownMenu]="modelDropdown" id="modelSelected">
+            {{modelSelect}}
+            <span nz-icon nzType="down"></span>
+          </button>
+          <nz-dropdown-menu #modelDropdown="nzDropdownMenu">
+            <ul nz-menu *ngFor="let model of availableModels">
+              <li nz-menu-item (click)="setModel(model.title)">{{model.title}}</li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-col>
+        <nz-col nzSpan="12" *ngIf="availableHypernets !== null">
+          <label for="hypernetSelected">Selected Hypernetwork: </label>
+          <button nz-button nz-dropdown [nzDropdownMenu]="hypernetDropdown" id="hypernetSelected">
+            {{hypernetSelect}}
+            <span nz-icon nzType="down"></span>
+          </button>
+          <nz-dropdown-menu #hypernetDropdown="nzDropdownMenu">
+            <ul nz-menu *ngFor="let hypernetworkItem of availableHypernets">
+              <li nz-menu-item (click)="setHypernet(hypernetworkItem)">{{hypernetworkItem}}</li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-col>
+      </nz-row>
+    </nz-card>
+  </nz-col>
+  <nz-col nzSpan="12">
+    <nz-card nzTitle="Sampling">
+      <nz-row>
+        <nz-col nzSpan="5">
+          <span nz-tooltip="Each Image's Sampling Steps">Sampling Steps:</span>
+        </nz-col>
+        <nz-col nzSpan="15">
+          <nz-slider [nzMin]="1" [nzMax]="150" [(ngModel)]="samplingSteps"></nz-slider>
+        </nz-col>
+        <div nz-col nzSpan="4">
+          <nz-input-number
+            [nzMin]="1"
+            [nzMax]="150"
+            [ngStyle]="{ marginLeft: '16px' }"
+            [(ngModel)]="samplingSteps"
+          ></nz-input-number>
+        </div>
+      </nz-row>
+      <nz-row>
+        <nz-col nzSpan="12">
+          <span>Current Sampling Method: {{_SAMPLER[samplerIndex]}} </span>
+        </nz-col>
+        <nz-col nzSpan="12">
+          <a nz-dropdown [nzDropdownMenu]="menu">
+            Change Sampling Method <i nz-icon nzType="down"></i>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu *ngFor="let sampler of _SAMPLER;let idx=index;">
+              <li nz-menu-item (click)="setSampler(idx)">{{sampler}}</li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-col>
+      </nz-row>
+      <nz-row>
+        <nz-col nzSpan="5">
+          <span nz-tooltip="Each Image's Sampling Steps">CFG Scale:</span>
+        </nz-col>
+        <nz-col nzSpan="15">
+          <nz-slider [nzMin]="1" [nzMax]="30" [nzStep]="0.5" [(ngModel)]="cfgScale"></nz-slider>
+        </nz-col>
+        <div nz-col nzSpan="4">
+          <nz-input-number
+            [nzMin]="1"
+            [nzMax]="30"
+            [nzStep]="0.5"
+            [ngStyle]="{ marginLeft: '16px' }"
+            [(ngModel)]="cfgScale"
+          ></nz-input-number>
+        </div>
+      </nz-row>
+    </nz-card>
+  </nz-col>
+  <nz-col nzSpan="12">
+    <nz-card nzTitle="Image Options">
+      <nz-row>
+        <nz-col nzSpan="4">
+          <span>Image Width</span>
+        </nz-col>
+        <nz-col nzSpan="16">
+          <nz-slider [nzMin]="64" [nzMax]="2048" [nzStep]="32" [(ngModel)]="imageSizeW"></nz-slider>
+        </nz-col>
+        <div nz-col nzSpan="4">
+          <nz-input-number
+            [nzMin]="64"
+            [nzMax]="2048"
+            [nzStep]="32"
+            [ngStyle]="{ marginLeft: '16px' }"
+            [(ngModel)]="imageSizeW"
+          ></nz-input-number>
+        </div>
+      </nz-row>
+      <nz-row>
+        <nz-col nzSpan="4">
+          <span>Image Height</span>
+        </nz-col>
+        <nz-col nzSpan="16">
+          <nz-slider [nzMin]="64" [nzMax]="2048" [nzStep]="32" [(ngModel)]="imageSizeH"></nz-slider>
+        </nz-col>
+        <div nz-col nzSpan="4">
+          <nz-input-number
+            [nzMin]="64"
+            [nzMax]="2048"
+            [nzStep]="32"
+            [ngStyle]="{ marginLeft: '16px' }"
+            [(ngModel)]="imageSizeH"
+          ></nz-input-number>
+        </div>
+      </nz-row>
+      <nz-row>
+        <nz-col nzSpan="24">
+          <label nz-checkbox [(ngModel)]="restoreFaceFlag">Restore Face</label>
+          <label nz-checkbox [(ngModel)]="tilingFlag">Tiling</label>
+          <label nz-checkbox [(ngModel)]="highresFixFlag">Highres. Fix</label>
+        </nz-col>
+      </nz-row>
+    </nz-card>
+  </nz-col>
+  <nz-col nzSpan="12">
+    <nz-card nzTitle="Batch Setting">
+      <nz-row>
+        <nz-col nzSpan="5">
+          <span nz-tooltip="How many image will be generated">Batch Count:</span>
+        </nz-col>
+        <nz-col nzSpan="15">
+          <nz-slider [nzMin]="1" [nzMax]="16" [(ngModel)]="batchCount"></nz-slider>
+        </nz-col>
+        <div nz-col nzSpan="4">
+          <nz-input-number
+            [nzMin]="1"
+            [nzMax]="16"
+            [ngStyle]="{ marginLeft: '16px' }"
+            [(ngModel)]="batchCount"
+          ></nz-input-number>
+        </div>
+      </nz-row>
+      <nz-row>
+        <nz-col nzSpan="5">
+          <span nz-tooltip="Higher number = higher VRAM Usage!">Batch Size:</span>
+        </nz-col>
+        <nz-col nzSpan="15">
+          <nz-slider [nzMin]="1" [nzMax]="8" [(ngModel)]="batchSize"></nz-slider>
+        </nz-col>
+        <div nz-col nzSpan="4">
+          <nz-input-number
+            [nzMin]="1"
+            [nzMax]="8"
+            [ngStyle]="{ marginLeft: '16px' }"
+            [(ngModel)]="batchSize"
+          ></nz-input-number>
+        </div>
+      </nz-row>
+    </nz-card>
+  </nz-col>
+  <nz-col nzSpan="12">
+    <nz-card nzTitle="Seed">
+      <nz-row nzJustify="space-evenly">
+        <nz-col nzSpan="16">
+          <nz-input-number [(ngModel)]="seed" [nzMin]="-1" [nzMax]="10" [nzStep]="1" style="width: 100%"></nz-input-number>
+        </nz-col>
+        <nz-col nzSpan="4">
+          <button nz-button nzType="primary" (click)="resetSeed()" style="width: 100%; margin-left: 5px; margin-right: 5px;">Reset</button>
+        </nz-col>
+        <nz-col nzSpan="4">
+          <button nz-button nzType="default" (click)="reuseLastSeed()" style="width: 100%; margin-right: 5px; margin-left: 5px;">Reuse</button>
+        </nz-col>
+      </nz-row>
+      <nz-row>
+        <nz-col nzSpan="24">
+          <span>Current Seed: {{seed}}</span>
+        </nz-col>
+      </nz-row>
+    </nz-card>
+  </nz-col>
+  <nz-col nzSpan="24">
+    <nz-row nzJustify="center">
+      <nz-col *ngIf="!isGenerating" nzSpan="24">
+        <button  nz-button nzType="primary" (click)="generate()" style="width: 100%; margin-top: 10px;">Generate</button>
+      </nz-col>
+      <nz-col *ngIf="isGenerating" nzSpan="12">
+        <button *ngIf="isGenerating" nz-button nzType="default" (click)="skip()" style="width: 100%; margin-top: 10px;">Skip</button>
+      </nz-col>
+      <nz-col *ngIf="isGenerating" nzSpan="12">
+        <button *ngIf="isGenerating" nz-button nzDanger (click)="interrupt()" style="width: 100%; margin-top: 10px;">Interrupt</button>
+      </nz-col>
+    </nz-row>
+  </nz-col>
+</nz-row>
+<nz-divider></nz-divider>
+<nz-row>
+  <nz-col nzSpan="24">
+    <nz-steps [nzCurrent]="steps">
+      <nz-step nzTitle="Job Submit"></nz-step>
+      <nz-step nzTitle="Loading Models"></nz-step>
+      <nz-step nzTitle="Generating" [nzPercentage]="generatingPercent"></nz-step>
+      <nz-step nzTitle="Done" ></nz-step>
+    </nz-steps>
+    <h3 style="text-align: center;">Please do not refresh this page while the image is generating</h3>
+  </nz-col>
+  <nz-col nzSpan="24" *ngIf="generatedData !== null">
+      <nz-image-group >
+        <nz-row nzJustify="space-evenly">
+        <nz-col nzSpan="8" *ngFor="let image of generatedData.images">
+          <img
+            nz-image
+            [nzSrc]="'data:image/png;base64,' + image"
+            alt=""
+            height="200px"
+           />
+      </nz-col>
+        </nz-row>
+      </nz-image-group>
+  </nz-col>
+</nz-row>

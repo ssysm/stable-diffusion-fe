@@ -1,0 +1,32 @@
+<nz-row>
+  <nz-col nzSpan="12">
+    <nz-form-item>
+      <nz-form-label nzSpan="8">API Endpoint Url</nz-form-label>
+      <nz-form-control nzSpan="16">
+        <input nz-input [(ngModel)]="apiEndpoint" />
+      </nz-form-control>
+    </nz-form-item>
+  </nz-col>
+  <nz-col nzSpan="12">
+
+  </nz-col>
+  <nz-col nzSpan="12">
+    <nz-form-item>
+      <nz-form-label nzSpan="8">Base Prompt</nz-form-label>
+      <nz-form-control nzSpan="16">
+        <textarea nz-input [(ngModel)]="basePrompt"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </nz-col>
+  <nz-col nzSpan="12">
+  <nz-form-item>
+    <nz-form-label nzSpan="8">Negative Base Prompt</nz-form-label>
+    <nz-form-control nzSpan="16">
+      <textarea nz-input [(ngModel)]="negBasePrompt"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+  </nz-col>
+  <nz-col nzSpan="24">
+    <button nz-button nzType="primary" (click)="save()">Save</button>
+  </nz-col>
+</nz-row>

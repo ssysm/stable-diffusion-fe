@@ -1,0 +1,9 @@
+const STORAGE_KEY = {
+  API_URL: 'API_URL',
+  PROMPT: {
+    BASE_PROMPT: 'PROMPT.BASE',
+    NEG_BASE_PROMPT: 'PROMPT.NEG_BASE',
+  }
+}
+
+export default STORAGE_KEY;
